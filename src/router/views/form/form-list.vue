@@ -12,11 +12,24 @@
       <template v-slot:items="props">
         <td>{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.description }}</td>
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">
+        <td class="px-0">
+          <v-icon
+            small
+            class="mr-3"
+            title="Add data"
+            @click="showItem(props.item)"
+          >
+            remove_red_eye
+          </v-icon>
+          <v-icon
+            small
+            class="mr-3"
+            title="Edit form"
+            @click="editItem(props.item)"
+          >
             edit
           </v-icon>
-          <v-icon small @click="deleteItem(props.item)">
+          <v-icon small title="Delete Form" @click="deleteItem(props.item)">
             delete
           </v-icon>
         </td>
@@ -54,9 +67,16 @@ export default {
   },
   methods: {
     deleteItem(item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') &&
-        this.desserts.splice(index, 1)
+      confirm('Are you sure you want to delete this item?') && item.remove()
+    },
+    showItem(item) {
+      this.$router.push({
+        name: 'data-entry',
+        params: { id: item.id },
+      })
+    },
+    editItem(item) {
+      this.$router.push({ name: 'new-form', params: { form: item } })
     },
   },
 }
