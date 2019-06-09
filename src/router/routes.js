@@ -2,10 +2,6 @@ import { AuthLayout, DefaultLayout } from './layouts'
 
 export const publicRoute = [
   {
-    path: '*',
-    component: () => import('./views/error/not-found.vue'),
-  },
-  {
     path: '/auth',
     component: AuthLayout,
     meta: { title: 'Login' },
@@ -21,16 +17,8 @@ export const publicRoute = [
     ],
   },
   {
-    path: '/404',
-    name: '404',
-    meta: { title: 'Not Found' },
+    path: '*',
     component: () => import('./views/error/not-found.vue'),
-  },
-  {
-    path: '/500',
-    name: '500',
-    meta: { title: 'Server Error' },
-    component: () => import('./views/error/error.vue'),
   },
 ]
 
@@ -52,11 +40,12 @@ export const protectedRoute = [
   {
     path: '/forms',
     component: DefaultLayout,
-    meta: { title: 'Forms', group: 'form', icon: '' },
+    meta: { title: 'Forms' },
+    redirect: { name: 'forms' },
     children: [
       {
-        path: '',
-        meta: { title: 'Forms', group: 'form', icon: 'dashboard' },
+        path: 'all',
+        meta: { title: 'List forms', group: 'form', icon: 'dashboard' },
         name: 'forms',
         component: () => import('./views/form/form-list.vue'),
       },
@@ -64,7 +53,16 @@ export const protectedRoute = [
         path: 'new',
         meta: { title: 'New form', group: 'form', icon: 'dashboard' },
         name: 'new-form',
+        hidden: true,
         component: () => import('./views/form/form-editor.vue'),
+        props: (route) => ({ form: route.params.form || {} }),
+      },
+      {
+        path: ':id',
+        meta: { title: 'Add data', group: 'form', icon: 'dashboard' },
+        name: 'data-entry',
+        hidden: true,
+        component: () => import('./views/data-entry.vue'),
       },
     ],
   },
