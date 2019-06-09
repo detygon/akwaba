@@ -7,13 +7,10 @@ const Menu = [
     name: 'dashboard',
   },
   {
-    title: 'Form',
+    title: 'Forms',
     group: 'main',
     icon: 'dashboard',
-    items: [
-      { title: 'Show all', component: 'forms', name: 'forms' },
-      { title: 'Add new', component: 'new-form', name: 'new-form' },
-    ],
+    name: 'forms',
   },
 ]
 
