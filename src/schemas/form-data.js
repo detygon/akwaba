@@ -8,10 +8,13 @@ export default {
       type: 'string',
       primary: true,
     },
-    content: {
-      type: 'string',
+    data: {
+      type: 'array',
       final: true,
     },
+    formId: {
+      type: 'string',
+    },
   },
-  required: ['id', 'content'],
+  required: ['id', 'data', 'formId'],
 }
