@@ -68,7 +68,10 @@ export default {
   }),
   async mounted() {
     const db = await dbService.get()
-    this.sub = db.forms.find().$.subscribe((forms) => (this.forms = forms))
+    this.sub = db.forms
+      // Temporary fix for query returning all the documents
+      .find({ name: { $regex: /\w/ } })
+      .$.subscribe((forms) => (this.forms = forms))
   },
   beforeDestroy() {
     this.sub.unsubscribe()
