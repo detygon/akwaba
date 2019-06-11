@@ -39,34 +39,58 @@ export default {
   methods: {
     async handleSubmit(data) {
       const db = await dbService.get()
-      const item = {
+      const entry = {
         id: Date.now().toString(),
         formId: this.form.id,
         data: [],
       }
 
-      const inputs = Array.from(data.target).filter((input) => {
+      let inputs = Array.from(data.target).filter((input) => {
         return (
           (['radio', 'checkbox'].includes(input.type) && input.checked) ||
           input.type !== 'submit'
         )
       })
 
-      const checkeds = []
+      const _done = []
 
       inputs.forEach((input) => {
-        if (input.type === 'checkbox') {
-          checkeds.push(input.value)
+        const inputName = input.name.replace(/\[\]/g, '')
+
+        if (_done.includes(inputName)) {
+          return
         }
 
-        item.data.push({
-          name: input.name.replace(/\[\]/g, ''),
+        const el = entry.data.find((x) => x.name === inputName)
+
+        if (el) {
+          let inputValue = null
+
+          if (input.type === 'radio') {
+            inputValue = this.$refs.form.querySelector(
+              `[name="${input.name}"]:checked`
+            ).value
+          }
+
+          if (input.type === 'checkbox') {
+            inputValue = Array.from(
+              this.$refs.form.querySelectorAll(`[name="${input.name}"]:checked`)
+            ).map((x) => x.value)
+          }
+
+          entry.data[entry.data.indexOf(el)].value = inputValue
+          _done.push(inputName)
+          return
+        }
+
+        entry.data.push({
+          name: inputName,
           type: input.type,
-          value: input.type === 'checkbox' ? checkeds : input.value,
+          value: input.value,
         })
       })
 
-      db.contents.insert(item).then(() => {
+      db.contents.insert(entry).then(() => {
         this.$refs.form.reset()
       })
     },
