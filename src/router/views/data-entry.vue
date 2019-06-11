@@ -1,9 +1,10 @@
 <template>
   <div class="container fluid">
     <template v-if="form">
-      <form @submit.prevent="handleSubmit" ref="form">
+      <form ref="form" @submit.prevent="handleSubmit">
         <FormeoRenderer :data="form.formData" />
         <v-btn color="success" type="submit" class="ml-0">
+          <v-icon class="mr-1">save</v-icon>
           Submit
         </v-btn>
       </form>
@@ -46,14 +47,14 @@ export default {
 
       const inputs = Array.from(data.target).filter((input) => {
         return (
-          !input.type === 'submit' ||
-          (['radio', 'checkbox'].includes(input.type) && input.checked)
+          (['radio', 'checkbox'].includes(input.type) && input.checked) ||
+          input.type !== 'submit'
         )
       })
 
       const checkeds = []
 
-      for (const input of inputs) {
+      inputs.forEach((input) => {
         if (input.type === 'checkbox') {
           checkeds.push(input.value)
         }
@@ -63,7 +64,7 @@ export default {
           type: input.type,
           value: input.type === 'checkbox' ? checkeds : input.value,
         })
-      }
+      })
 
       db.contents.insert(item).then(() => {
         this.$refs.form.reset()
