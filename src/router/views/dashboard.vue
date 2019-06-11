@@ -4,7 +4,7 @@
       <v-layout row wrap>
         <v-flex lg4 sm6 xs12>
           <MiniStatistic
-            icon="fa fa-facebook"
+            icon="align-justify"
             title="100+"
             sub-title="Forms"
             color="indigo"
@@ -13,7 +13,7 @@
         </v-flex>
         <v-flex lg4 sm6 xs12>
           <MiniStatistic
-            icon="fa fa-google"
+            icon="align-justify"
             title="150+"
             sub-title="Forms completed"
             color="red"
@@ -22,7 +22,7 @@
         </v-flex>
         <v-flex lg4 sm6 xs12>
           <MiniStatistic
-            icon="fa fa-twitter"
+            icon="align-justify"
             title="200+"
             sub-title="Followers"
             color="light-blue"
