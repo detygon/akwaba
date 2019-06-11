@@ -1,9 +1,7 @@
 <template>
   <div class="container fluid">
     <v-toolbar flat color="white">
-      <v-toolbar-title>Form templates</v-toolbar-title>
-      <v-divider class="mx-2" inset vertical></v-divider>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-btn color="primary" dark class="mb-2" :to="{ name: 'new-form' }">
         New Form
       </v-btn>
@@ -13,23 +11,16 @@
         <td>{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.description }}</td>
         <td class="px-0">
-          <v-icon
-            small
-            class="mr-3"
-            title="Add data"
-            @click="showItem(props.item)"
-          >
+          <v-icon small class="mr-3" title="View" @click="showItem(props.item)">
             remove_red_eye
           </v-icon>
-          <v-icon
-            small
-            class="mr-3"
-            title="Edit form"
-            @click="editItem(props.item)"
-          >
+          <v-icon small class="mr-3" title="Fill" @click="fillItem(props.item)">
+            launch
+          </v-icon>
+          <v-icon small class="mr-3" title="Edit" @click="editItem(props.item)">
             edit
           </v-icon>
-          <v-icon small title="Delete Form" @click="deleteItem(props.item)">
+          <v-icon small title="Delete" @click="deleteItem(props.item)">
             delete
           </v-icon>
         </td>
@@ -58,9 +49,7 @@ export default {
   }),
   async mounted() {
     const db = await dbService.get()
-    this.sub = db.forms
-      .find()
-      .$.subscribe((forms) => (this.forms = forms || []))
+    this.sub = db.forms.find().$.subscribe((forms) => (this.forms = forms))
   },
   beforeDestroy() {
     this.sub.unsubscribe()
@@ -70,6 +59,12 @@ export default {
       confirm('Are you sure you want to delete this item?') && item.remove()
     },
     showItem(item) {
+      this.$router.push({
+        name: 'data-list',
+        params: { id: item.id, form: item },
+      })
+    },
+    fillItem(item) {
       this.$router.push({
         name: 'data-entry',
         params: { id: item.id },
