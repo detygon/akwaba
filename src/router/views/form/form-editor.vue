@@ -1,6 +1,6 @@
 <template>
   <div class="container fluid">
-    <FormBuilder :data="form.formData" @save="handleSave" />
+    <FormBuilder :data="form.formData" @save="handleSave" :key="formKey" />
   </div>
 </template>
 
@@ -19,6 +19,14 @@ export default {
       default: () => ({}),
     },
   },
+  data: () => ({
+    formKey: 1,
+  }),
+  computed: {
+    isFormValid(data) {
+      return data.every((item) => item.attrs.name)
+    },
+  },
   methods: {
     async updateForm(data) {
       const db = await dbService.get()
@@ -29,6 +37,8 @@ export default {
       await query.update({ $set: { formData: data } })
     },
     async handleSave(data) {
+      // this.isFormValid(data.fields)
+
       const db = await dbService.get()
 
       if (this.form.formData) {
@@ -46,6 +56,8 @@ export default {
       }
 
       db.forms.insert(item)
+      // Force a rerender of the component
+      ++this.formKey
     },
   },
 }
