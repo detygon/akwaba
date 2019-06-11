@@ -26,7 +26,7 @@ export const protectedRoute = [
   {
     path: '/',
     component: DefaultLayout,
-    meta: { title: 'Home', group: 'main', icon: '' },
+    meta: { title: 'Home' },
     redirect: '/dashboard',
     children: [
       {
@@ -58,11 +58,19 @@ export const protectedRoute = [
         props: (route) => ({ form: route.params.form || {} }),
       },
       {
-        path: ':id',
+        path: ':id/fill',
         meta: { title: 'Add data', group: 'form', icon: 'dashboard' },
         name: 'data-entry',
         hidden: true,
         component: () => import('./views/data-entry.vue'),
+      },
+      {
+        path: ':id',
+        meta: { title: 'Check data', group: 'form', icon: 'dashboard' },
+        name: 'data-list',
+        hidden: true,
+        component: () => import('./views/data-list.vue'),
+        props: (route) => ({ form: route.params.form }),
       },
     ],
   },
