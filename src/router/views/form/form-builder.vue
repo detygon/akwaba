@@ -98,6 +98,7 @@ export default {
 
       if (this.form.formData) {
         await this.update(this.data)
+        window.$app.$emit('APP_RESOURCE_SAVED')
         this.dialog = false
         return
       }
@@ -110,6 +111,7 @@ export default {
       }
 
       db.forms.insert(item).then(() => {
+        window.$app.$emit('APP_RESOURCE_SAVED', item)
         // Force a rerender of the component
         ++this.formKey
       })
