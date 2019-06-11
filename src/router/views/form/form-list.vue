@@ -1,12 +1,32 @@
 <template>
   <div class="container fluid">
     <v-toolbar flat color="white">
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
       <v-spacer />
-      <v-btn color="primary" dark class="mb-2" :to="{ name: 'form-builder' }">
-        New Form
+      <v-btn
+        color="primary"
+        dark
+        :to="{ name: 'form-builder' }"
+        title="Create a form"
+      >
+        <v-icon class="mr-1">
+          add
+        </v-icon>
+        New
       </v-btn>
     </v-toolbar>
-    <v-data-table :headers="headers" :items="forms" class="elevation-1">
+    <v-data-table
+      :headers="headers"
+      :items="forms"
+      :search="search"
+      class="elevation-1"
+    >
       <template v-slot:items="props">
         <td>{{ props.item.name }}</td>
         <td class="text-xs-left">{{ props.item.description }}</td>
@@ -37,7 +57,6 @@ import dbService from '@/service/db-service'
 
 export default {
   data: () => ({
-    dialog: false,
     headers: [
       { text: 'Name', value: 'name' },
       { text: 'Description', value: 'description', sortable: false },
@@ -45,7 +64,7 @@ export default {
     ],
     forms: [],
     sub: null,
-    loading: false,
+    search: '',
   }),
   async mounted() {
     const db = await dbService.get()
