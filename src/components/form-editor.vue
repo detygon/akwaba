@@ -7,7 +7,7 @@ import { FormeoEditor } from 'formeo'
 import 'formeo/dist/formeo.min.css'
 
 export default {
-  name: 'FormBuilder',
+  name: 'FormEditor',
   props: {
     data: {
       type: Object,

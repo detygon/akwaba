@@ -2,7 +2,7 @@
   <div class="container fluid">
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="data"
       :loading="!sub"
       class="elevation-1"
     >
@@ -20,22 +20,11 @@ import dbService from '@/service/db-service'
 
 export default {
   name: 'DataList',
-  props: {
-    form: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
   data: () => ({
     data: [],
     sub: null,
     headers: [],
   }),
-  computed: {
-    items() {
-      return this.data
-    },
-  },
   async mounted() {
     const db = await dbService.get()
     this.sub = db.contents
@@ -46,25 +35,28 @@ export default {
         this.data = this.buildData(contents)
       })
 
-    this.headers = this.buildHeaders()
+    this.headers = this.buildHeaders(
+      JSON.parse(sessionStorage.getItem('current-form'))
+    )
   },
   beforeDestroy() {
     this.sub.unsubscribe()
   },
+  beforeRouteLeave(to, from, next) {
+    sessionStorage.removeItem('current-form')
+    next()
+  },
   methods: {
-    buildHeaders() {
+    buildHeaders(form) {
       const headers = []
-      const fields = this.form.formData.fields
+      const fields = form.formData.fields
 
-      for (const key in fields) {
-        if (fields.hasOwnProperty(key)) {
-          const element = fields[key]
-          headers.push({
-            text: element.config.label,
-            value: element.attrs.name || element.attrs.id,
-            sortable: false,
-          })
-        }
+      for (const value of Object.values(fields)) {
+        headers.push({
+          text: value.config.label,
+          value: value.attrs.name || value.attrs.id,
+          sortable: false,
+        })
       }
 
       return headers

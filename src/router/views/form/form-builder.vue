@@ -1,33 +1,33 @@
 <template>
   <div class="container fluid">
-    <FormBuilder :data="form.formData" @save="handleSave" :key="formKey" />
+    <FormEditor :key="formKey" :data="form.formData" @save="handleSave" />
   </div>
 </template>
 
 <script>
-import FormBuilder from '@/components/form-builder.vue'
+import FormEditor from '@/components/form-editor.vue'
 import dbService from '@/service/db-service'
 
 export default {
-  name: 'FormEditor',
+  name: 'FormBuilder',
   components: {
-    FormBuilder,
-  },
-  props: {
-    form: {
-      type: Object,
-      default: () => ({}),
-    },
+    FormEditor,
   },
   data: () => ({
     formKey: 1,
+    form: {},
   }),
-  computed: {
-    isFormValid(data) {
-      return data.every((item) => item.attrs.name)
-    },
+  created() {
+    this.form = JSON.parse(sessionStorage.getItem('current-form')) || {}
+  },
+  beforeRouteLeave(to, from, next) {
+    sessionStorage.removeItem('current-form')
+    next()
   },
   methods: {
+    isFormValid(data) {
+      return data.every((item) => item.attrs.name || item.attrs.id)
+    },
     async updateForm(data) {
       const db = await dbService.get()
       const query = db.forms
@@ -37,7 +37,10 @@ export default {
       await query.update({ $set: { formData: data } })
     },
     async handleSave(data) {
-      // this.isFormValid(data.fields)
+      if (!this.isFormValid(Object.values(data.fields))) {
+        console.log('Error')
+        return
+      }
 
       const db = await dbService.get()
 

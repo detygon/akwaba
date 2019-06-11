@@ -2,7 +2,7 @@
   <div class="container fluid">
     <v-toolbar flat color="white">
       <v-spacer />
-      <v-btn color="primary" dark class="mb-2" :to="{ name: 'new-form' }">
+      <v-btn color="primary" dark class="mb-2" :to="{ name: 'form-builder' }">
         New Form
       </v-btn>
     </v-toolbar>
@@ -59,19 +59,15 @@ export default {
       confirm('Are you sure you want to delete this item?') && item.remove()
     },
     showItem(item) {
-      this.$router.push({
-        name: 'data-list',
-        params: { id: item.id, form: item },
-      })
+      sessionStorage.setItem('current-form', JSON.stringify(item))
+      this.$router.push({ name: 'data-list', params: { id: item.id } })
     },
     fillItem(item) {
-      this.$router.push({
-        name: 'data-entry',
-        params: { id: item.id },
-      })
+      this.$router.push({ name: 'data-entry', params: { id: item.id } })
     },
     editItem(item) {
-      this.$router.push({ name: 'new-form', params: { form: item } })
+      sessionStorage.setItem('current-form', JSON.stringify(item))
+      this.$router.push({ name: 'form-builder' })
     },
   },
 }
