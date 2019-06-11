@@ -19,7 +19,6 @@
 
 <script>
 import NetworkStatusIndicator from '@/components/network-status-indicator.vue'
-import AppEvents from './event'
 
 export default {
   components: {
@@ -35,16 +34,5 @@ export default {
       },
     }
   },
-  created() {
-    // add app events
-  },
 }
 </script>
-
-<style scoped>
-.setting-fab {
-  top: 50% !important;
-  right: 0;
-  border-radius: 0;
-}
-</style>

@@ -46,7 +46,6 @@ export default {
       this.showDrawer = !this.showDrawer
     },
   },
-  created() {},
 }
 </script>
 
