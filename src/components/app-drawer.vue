@@ -3,7 +3,7 @@
     class="app--drawer"
     :mini-variant.sync="mini"
     app
-    v-model="showDrawer"
+    :value="showDrawer"
     :width="drawWidth"
   >
     <v-toolbar color="primary darken-1" dark>
@@ -122,7 +122,7 @@ export default {
   props: {
     expanded: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     drawWidth: {
       type: [Number, String],
@@ -150,7 +150,6 @@ export default {
       return this.$vuetify.options.extra.sideNav
     },
   },
-  created() {},
   methods: {
     genChildTarget(item, subItem) {
       if (subItem.href) return
