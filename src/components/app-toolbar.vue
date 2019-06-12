@@ -21,7 +21,7 @@
             <v-icon medium>notifications</v-icon>
           </v-badge>
         </v-btn>
-        <notification-list :items="items"></notification-list>
+        <NotificationList :items="items"></NotificationList>
       </v-menu>
       <v-menu
         offset-y
@@ -37,14 +37,14 @@
         <v-list class="pa-0">
           <v-list-tile
             v-for="(item, index) in items"
+            :key="index"
             :to="!item.href ? { name: item.name } : null"
             :href="item.href"
-            @click="item.click"
             ripple="ripple"
             :disabled="item.disabled"
             :target="item.target"
             rel="noopener"
-            :key="index"
+            @click="item.click"
           >
             <v-list-tile-action v-if="item.icon">
               <v-icon>{{ item.icon }}</v-icon>

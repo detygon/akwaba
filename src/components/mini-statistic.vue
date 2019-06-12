@@ -5,10 +5,13 @@
         <div class="layout row ma-0">
           <div class="sm6 xs6 flex">
             <div class="layout column ma-0 justify-center align-center">
-              <v-icon size="56px" :color="color">{{ icon }}</v-icon>
+              <BaseIcon size="lg" :color="color" :name="icon" />
             </div>
           </div>
-          <div class="sm6 xs6 flex text-sm-center py-3 white--text" :class="color">
+          <div
+            class="sm6 xs6 flex text-sm-center py-3 white--text"
+            :class="color"
+          >
             <div class="headline">{{ title }}</div>
             <span class="caption">{{ subTitle }}</span>
           </div>
@@ -19,12 +22,20 @@
 </template>
 
 <script>
+import BaseIcon from '@/components/_base-icon.vue'
+
 export default {
   props: {
-    icon: String,
+    icon: {
+      type: String,
+      default: null,
+    },
     title: String,
     subTitle: String,
-    color: String
-  }
+    color: String,
+  },
+  components: {
+    BaseIcon,
+  },
 }
 </script>
