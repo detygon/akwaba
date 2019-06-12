@@ -72,4 +72,19 @@ export const protectedRoute = [
       },
     ],
   },
+  {
+    path: '/statistics',
+    component: DefaultLayout,
+    meta: { title: 'Statistics' },
+    redirect: { name: 'statistics' },
+    children: [
+      {
+        path: 'explore',
+        meta: { title: 'Explore dataset', group: 'form', icon: 'dashboard' },
+        name: 'statistics',
+        hidden: true,
+        component: () => import('./views/statistics.vue'),
+      },
+    ],
+  },
 ]

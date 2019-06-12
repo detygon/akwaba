@@ -12,6 +12,12 @@ const Menu = [
     icon: 'dashboard',
     name: 'forms',
   },
+  {
+    title: 'Statistics',
+    group: 'main',
+    icon: 'dashboard',
+    name: 'statistics',
+  },
 ]
 
 Menu.forEach((item) => {

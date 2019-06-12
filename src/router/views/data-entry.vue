@@ -56,6 +56,7 @@ export default {
 
       inputs.forEach((input) => {
         const inputName = input.name.replace(/\[\]/g, '')
+        let inputLabel = ''
 
         if (_done.includes(inputName)) {
           return
@@ -67,26 +68,38 @@ export default {
           let inputValue = null
 
           if (input.type === 'radio') {
-            inputValue = this.$refs.form.querySelector(
+            const radioEl = this.$refs.form.querySelector(
               `[name="${input.name}"]:checked`
-            ).value
+            )
+            inputValue = radioEl.value
+            inputLabel = this.$refs.form.querySelector(
+              `label[for="${radioEl.id}"]`
+            )
           }
 
           if (input.type === 'checkbox') {
-            inputValue = Array.from(
-              this.$refs.form.querySelectorAll(`[name="${input.name}"]:checked`)
-            ).map((x) => x.value)
+            const boxes = this.$refs.form.querySelectorAll(
+              `[name="${input.name}"]:checked`
+            )
+            inputValue = Array.from(boxes).map((x) => x.value)
+            inputLabel = this.$refs.form.querySelector(
+              `label[for="${boxes[0].id}"]`
+            )
           }
 
           entry.data[entry.data.indexOf(el)].value = inputValue
+          entry.data[entry.data.indexOf(el)].label = inputLabel.textContent
           _done.push(inputName)
           return
         }
+
+        inputLabel = this.$refs.form.querySelector(`label[for="${input.id}"]`)
 
         entry.data.push({
           name: inputName,
           type: input.type,
           value: input.value,
+          label: inputLabel.textContent,
         })
       })
 
