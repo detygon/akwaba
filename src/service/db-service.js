@@ -4,6 +4,7 @@ import FormDataSchema from '@/schemas/form-data'
 
 RxDB.plugin(require('pouchdb-adapter-idb'))
 RxDB.plugin(require('pouchdb-adapter-http'))
+RxDB.plugin(require('pouchdb-authentication'))
 
 const useAdapter = 'idb'
 const syncURL = process.env.VUE_APP_SYNC_URL || 'http://localhost:5984'
@@ -38,8 +39,9 @@ const setupDB = async () => {
 
   await Promise.all(collections.map((collection) => db.collection(collection)))
 
-  await db.forms.sync({ remote })
-  await db.contents.sync({ remote })
+  await db.forms.sync({ remote, })
+
+  await db.contents.sync({ remote, })
 
   return db
 }
