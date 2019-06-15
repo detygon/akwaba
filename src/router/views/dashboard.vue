@@ -13,7 +13,7 @@
             Sync down
           </v-btn>
           <v-btn color="red" dark @click="clearStorage">
-            Clear storage
+            Drop store
           </v-btn>
         </v-flex>
       </v-layout>
@@ -26,12 +26,20 @@
             icon="list"
           />
         </v-flex>
-        <v-flex md3 sm6 xs6>
+        <v-flex md3 sm6 xs12>
           <MiniStatistic
             :title="countResponses.toString()"
             sub-title="# Responses"
             color="orange"
             icon="edit"
+          />
+        </v-flex>
+        <v-flex md3 sm6 xs12>
+          <MiniStatistic
+            :title="countAgents.toString()"
+            sub-title="# Agents"
+            color="indigo"
+            icon="person"
           />
         </v-flex>
       </v-layout>
@@ -53,6 +61,7 @@ export default {
   data: () => ({
     countForms: 0,
     countResponses: 0,
+    countAgents: 0,
     subs: [],
   }),
   async mounted() {
@@ -98,8 +107,10 @@ export default {
           })
         )
         this.subs.push(
-          state.complete$.subscribe((result) => {
-            window.$app.$emit('NOTIFY_SUCCESS', 'Synchronization completed')
+          state.complete$.subscribe((complete) => {
+            if (complete.ok) {
+              window.$app.$emit('NOTIFY_SUCCESS', 'Synchronization completed')
+            }
           })
         )
       })
