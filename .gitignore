@@ -12,6 +12,7 @@ release
 db/
 dist/
 log.txt
+.env
 
 # Editor directories and files
 .idea
