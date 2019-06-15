@@ -4,8 +4,8 @@ A digital data collection system to help organizations optimize the collection, 
 
 ## Live demo
 
-Link: https://naughty-villani-151fac.netlify.com
-Default credentials: admin/admin
+- Link: https://naughty-villani-151fac.netlify.com
+- Default credentials: admin/admin
 
 ## Requirements
 
