@@ -17,6 +17,13 @@ export const publicRoute = [
     ],
   },
   {
+    path: '/register',
+    name: 'register',
+    meta: { title: 'Create an account' },
+    component: () => import('./views/auth/registration.vue'),
+    hidden: true,
+  },
+  {
     path: '*',
     component: () => import('./views/error/not-found.vue'),
   },
@@ -26,7 +33,7 @@ export const protectedRoute = [
   {
     path: '/',
     component: DefaultLayout,
-    meta: { title: 'Home' },
+    meta: { title: 'Home', authRequired: true },
     redirect: '/dashboard',
     children: [
       {
@@ -40,32 +47,32 @@ export const protectedRoute = [
   {
     path: '/forms',
     component: DefaultLayout,
-    meta: { title: 'Forms' },
+    meta: { title: 'Forms', authRequired: true },
     redirect: { name: 'forms' },
     children: [
       {
         path: 'all',
-        meta: { title: 'List forms', group: 'form', icon: 'dashboard' },
+        meta: { title: 'List forms', group: 'form', icon: 'list' },
         name: 'forms',
         component: () => import('./views/form/form-list.vue'),
       },
       {
         path: 'builder',
-        meta: { title: 'Form builder', group: 'form', icon: 'dashboard' },
+        meta: { title: 'Form builder', group: 'form', icon: 'list' },
         name: 'form-builder',
         hidden: true,
         component: () => import('./views/form/form-builder.vue'),
       },
       {
         path: ':id/fill',
-        meta: { title: 'Add data', group: 'form', icon: 'dashboard' },
+        meta: { title: 'Add data', group: 'form', icon: 'edit' },
         name: 'data-entry',
         hidden: true,
         component: () => import('./views/data-entry.vue'),
       },
       {
         path: ':id',
-        meta: { title: 'Check data', group: 'form', icon: 'dashboard' },
+        meta: { title: 'Check data', group: 'form', icon: 'list' },
         name: 'data-list',
         hidden: true,
         component: () => import('./views/data-list.vue'),
@@ -75,7 +82,7 @@ export const protectedRoute = [
   {
     path: '/statistics',
     component: DefaultLayout,
-    meta: { title: 'Statistics' },
+    meta: { title: 'Statistics', authRequired: true },
     redirect: { name: 'statistics' },
     children: [
       {

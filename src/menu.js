@@ -9,13 +9,13 @@ const Menu = [
   {
     title: 'Forms',
     group: 'main',
-    icon: 'dashboard',
+    icon: 'list',
     name: 'forms',
   },
   {
     title: 'Statistics',
     group: 'main',
-    icon: 'dashboard',
+    icon: 'pie_chart',
     name: 'statistics',
   },
 ]

@@ -1,5 +1,5 @@
 <template>
-  <v-app id="login" class="primary">
+  <v-app id="register" class="primary">
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
@@ -17,15 +17,19 @@
                 </div>
                 <v-form>
                   <v-text-field
+                    append-icon="email"
+                    label="Email"
+                    type="text"
+                    v-model="model.email"
+                  ></v-text-field>
+                  <v-text-field
                     append-icon="person"
-                    name="login"
-                    label="Login"
+                    label="Username"
                     type="text"
                     v-model="model.username"
                   ></v-text-field>
                   <v-text-field
                     append-icon="lock"
-                    name="password"
                     label="Password"
                     type="password"
                     v-model="model.password"
@@ -33,8 +37,13 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn block color="primary" @click="login" :loading="loading">
-                  Login
+                <v-btn
+                  block
+                  color="primary"
+                  @click="register"
+                  :loading="loading"
+                >
+                  Register
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -46,7 +55,7 @@
 </template>
 
 <script>
-import { login } from '@/service/auth'
+import { register } from '@/service/auth'
 
 export default {
   data: () => ({
@@ -54,14 +63,15 @@ export default {
     model: {
       username: '',
       password: '',
+      email: '',
     },
   }),
 
   methods: {
-    login() {
+    register() {
       this.loading = true
-      const { username, password } = this.model
-      login({ username, password })
+      const { username, password, email } = this.model
+      register({ username, password, email })
         .then((data) => {
           localStorage.setItem('jwt', data.jwt)
           localStorage.setItem('user', JSON.stringify(data.user))

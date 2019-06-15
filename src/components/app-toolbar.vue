@@ -17,11 +17,11 @@
       >
         <v-btn icon flat slot="activator">
           <v-badge color="red" overlap>
-            <span slot="badge">{{ items.length }}</span>
+            <span slot="badge">{{ [].length }}</span>
             <v-icon medium>notifications</v-icon>
           </v-badge>
         </v-btn>
-        <NotificationList :items="items"></NotificationList>
+        <NotificationList :items="[]"></NotificationList>
       </v-menu>
       <v-menu
         offset-y
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      items: [],
+      items: [{ title: 'Logout', click: this.logout, href: null }],
     }
   },
   computed: {
@@ -79,6 +79,11 @@ export default {
     },
   },
   methods: {
+    logout() {
+      localStorage.removeItem('jwt')
+      localStorage.removeItem('user')
+      this.$router.push({ name: 'login' })
+    },
     handleDrawerToggle() {
       this.$emit('side-icon-click')
     },
