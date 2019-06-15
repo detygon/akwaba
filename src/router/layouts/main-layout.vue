@@ -1,10 +1,6 @@
 <template>
   <v-app id="inspire" class="app dashboard">
-    <AppDrawer
-      v-click-outside="handleDrawerVisiable"
-      class="app--drawer"
-      :show-drawer="showDrawer"
-    ></AppDrawer>
+    <AppDrawer class="app--drawer" :show-drawer="showDrawer"></AppDrawer>
     <AppToolbar
       class="app--toolbar"
       @side-icon-click="handleDrawerVisiable"
