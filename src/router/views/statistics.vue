@@ -115,7 +115,7 @@ export default {
 
       if (this.contents.length === 0) return
 
-      this.data = this.contents[0].data.map((x) => {
+      this.data = this.contents[0].data.reduce((acc, x) => {
         const field = Object.values(form.formData.fields)
           .filter(
             (field) => field.attrs.type !== 'text' && field.tag !== 'textarea'
@@ -124,12 +124,18 @@ export default {
             (field) => field.attrs.name === x.name || field.attrs.id === x.name
           )
 
-        return field ? { text: field.config.label, value: x.name } : {}
-      })
+        if (field) {
+          const value = field.attrs.name || field.attrs.id
+          acc.push({ text: field.config.label, value })
+          return acc
+        }
+
+        return acc
+      }, [])
     },
     async getFormContents(formId) {
       const db = await dbService.get()
-      this.contents = await db.contents
+      this.contents = await db.responses
         .find()
         .where('formId')
         .eq(formId)
@@ -138,8 +144,13 @@ export default {
       this.setData(formId)
     },
     makeDataset(inputName) {
+      console.log(inputName)
       const dataset = map(this.contents, (item) => {
-        const entry = item.data.find((entry) => entry.name === inputName)
+        const entry = item.data.find((entry) => {
+          console.log(entry)
+          return entry.name === inputName
+        })
+
         return { name: entry.label }
       })
 

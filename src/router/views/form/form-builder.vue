@@ -17,6 +17,7 @@
                   v-model="name"
                   label="Name*"
                   required
+                  autofocus
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
@@ -111,6 +112,8 @@ export default {
       }
 
       db.forms.insert(item).then(() => {
+        this.name = ''
+        this.description = ''
         window.$app.$emit('APP_RESOURCE_SAVED', item)
         // Force a rerender of the component
         ++this.formKey

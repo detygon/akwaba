@@ -13,6 +13,7 @@
                 <v-text-field
                   v-model="attr.name"
                   label="Name*"
+                  autofocus
                   required
                 ></v-text-field>
               </v-flex>
@@ -96,6 +97,8 @@ export default {
     addAttribute() {
       this.dialog = false
       this.actionEvent.addAction(this.attr.name, this.attr.value)
+      this.attr.name = ''
+      this.attr.value = ''
     },
     handleAddAttribute(evt) {
       this.dialog = true

@@ -103,7 +103,7 @@ export default {
         })
       })
 
-      db.contents.insert(entry).then(() => {
+      db.responses.insert(entry).then(() => {
         window.$app.$emit('APP_RESOURCE_SAVED', entry)
         this.$refs.form.reset()
       })

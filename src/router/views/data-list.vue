@@ -27,7 +27,7 @@ export default {
   }),
   async mounted() {
     const db = await dbService.get()
-    this.sub = db.contents
+    this.sub = db.responses
       .find()
       .where('formId')
       .equals(this.$route.params.id)

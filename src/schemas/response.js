@@ -1,6 +1,6 @@
 export default {
-  title: 'Form Data Schema',
-  description: 'Describe a form data',
+  title: 'ResponseSchema',
+  description: 'Describe a form response',
   version: 0,
   type: 'object',
   properties: {
@@ -10,7 +10,7 @@ export default {
     },
     data: {
       type: 'array',
-      final: true,
+      final: true, // Answer can not be modified later on
     },
     formId: {
       type: 'string',

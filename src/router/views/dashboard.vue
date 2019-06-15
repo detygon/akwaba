@@ -3,11 +3,36 @@
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex sm12 xs12>
-          <NetworkStatusIndicator />
+          <NetworkStatusIndicator :visible="true" />
         </v-flex>
-        <v-flex sm4 xs4>
-          <v-btn type="primary" @click="sync('up')">Sync up</v-btn>
-          <v-btn type="primary" @click="sync('down')">Sync down</v-btn>
+        <v-flex sm12 xs12>
+          <v-btn color="primary" @click="sync('up')">
+            Sync up
+          </v-btn>
+          <v-btn color="green" dark @click="sync('down')">
+            Sync down
+          </v-btn>
+          <v-btn color="red" dark @click="clearStorage">
+            Clear storage
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex md3 sm6 xs12>
+          <MiniStatistic
+            :title="countForms.toString()"
+            sub-title="# Forms"
+            color="blue"
+            icon="list"
+          />
+        </v-flex>
+        <v-flex md3 sm6 xs6>
+          <MiniStatistic
+            :title="countResponses.toString()"
+            sub-title="# Responses"
+            color="orange"
+            icon="edit"
+          />
         </v-flex>
       </v-layout>
     </v-container>
@@ -15,61 +40,84 @@
 </template>
 
 <script>
-import NetworkStatusIndicator from '@/components/network-status-indicator'
-import dbService from '@/service/db-service'
+import NetworkStatusIndicator from '@/components/network-status-indicator.vue'
+import MiniStatistic from '@/components/mini-statistic.vue'
+import dbService, { collections } from '@/service/db-service'
+import { dbRemote as remote } from '@/constants'
 
 export default {
   components: {
     NetworkStatusIndicator,
+    MiniStatistic,
   },
-  data: () => ({}),
-  computed: {},
+  data: () => ({
+    countForms: 0,
+    countResponses: 0,
+    subs: [],
+  }),
+  async mounted() {
+    const db = await dbService.get()
+    const forms = await db.forms.find({ name: { $regex: /\w/ } }).exec()
+    const responses = await db.responses.find({ data: { $regex: /\w/ } }).exec()
+    this.countForms = forms.length
+    this.countResponses = responses.length
+  },
+  beforeDestroy() {
+    this.subs.forEach((sub) => {
+      sub.unsubscribe()
+    })
+  },
   methods: {
-    async syncUp(db) {
-      await db.forms.sync({
-        remote: 'http://localhost:5984',
-        direction: {
-          pull: true,
-          push: false,
-        },
+    async sync(action) {
+      const db = await dbService.get()
+      const direction = {
+        pull: action === 'down',
+        push: action === 'up',
+      }
+
+      const syncStates = Object.keys(db.collections).map((collection) => {
+        return db[collection].sync({
+          remote,
+          direction,
+          options: {
+            live: false,
+            retry: false,
+          },
+        })
       })
 
-      await db.contents.sync({
-        remote: 'http://localhost:5984',
-        direction: {
-          pull: true,
-          push: false,
-        },
+      syncStates.forEach((state) => {
+        this.subs.push(
+          state.error$.subscribe((error) => {
+            if (error) {
+              window.$app.$emit(
+                'NOTIFY_ERROR',
+                'Synchronization failed. Please try later.'
+              )
+            }
+          })
+        )
+        this.subs.push(
+          state.complete$.subscribe((result) => {
+            window.$app.$emit('NOTIFY_SUCCESS', 'Synchronization completed')
+          })
+        )
       })
     },
-    async syncDown(db) {
-      await db.forms.sync({
-        remote: 'http://localhost:5984',
-        direction: {
-          pull: false,
-          push: true,
-        },
-      })
-      await db.contents.sync({
-        remote: 'http://localhost:5984',
-        direction: {
-          pull: false,
-          push: true,
-        },
-      })
-    },
-    async sync(direction) {
+    async clearStorage() {
       const db = await dbService.get()
-      switch (direction) {
-        case 'up':
-          this.syncUp(db)
-          break
-        case 'down':
-          this.syncDown(db)
-          break
-        default:
-          break
-      }
+
+      const result = Object.keys(db.collections).map((collection) => {
+        return db[collection].remove()
+      })
+
+      Promise.all(result).then(async () => {
+        // Recreate the database collections
+        await Promise.all(
+          collections.map((collection) => db.collection(collection))
+        )
+        window.$app.$emit('NOTIFY', 'Data cleared')
+      })
     },
   },
 }

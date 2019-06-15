@@ -7,9 +7,9 @@
     :width="drawWidth"
   >
     <v-toolbar color="primary darken-1" dark>
-      <img :src="computeLogo" height="36" alt="Vue Material Admin Template" />
+      <img :src="computeLogo" height="36" alt="Logo" />
       <v-toolbar-title class="ml-0 pl-3">
-        <span class="hidden-sm-and-down">Vue Material</span>
+        <span class="hidden-sm-and-down">Akwaba</span>
       </v-toolbar-title>
     </v-toolbar>
     <v-list dense expand>
@@ -125,9 +125,6 @@ export default {
     return {
       mini: false,
       menus: menu,
-      scrollSettings: {
-        maxScrollbarLength: 160,
-      },
     }
   },
   computed: {

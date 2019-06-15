@@ -1,47 +1,47 @@
 import * as RxDB from 'rxdb'
 import FormSchema from '@/schemas/form'
-import FormDataSchema from '@/schemas/form-data'
+import ResponseSchema from '@/schemas/response'
 
 RxDB.plugin(require('pouchdb-adapter-idb'))
 RxDB.plugin(require('pouchdb-adapter-http'))
 RxDB.plugin(require('pouchdb-authentication'))
 
 const useAdapter = 'idb'
-const syncURL = process.env.VUE_APP_SYNC_URL || 'http://localhost:5984'
 const dbName = process.env.VUE_APP_DB_NAME || 'akwaba'
+const dbUsername = process.env.VUE_APP_DB_USERNAME || 'admin'
 const dbPass = process.env.VUE_APP_DB_PASS || '12345678'
-const remote = `${syncURL}/${dbName}`
 
-const collections = [
+export const collections = [
   {
     name: 'forms',
     schema: FormSchema,
     sync: true,
   },
   {
-    name: 'contents',
-    schema: FormDataSchema,
+    name: 'responses',
+    schema: ResponseSchema,
     sync: true,
   },
 ]
 
-const setupDB = async () => {
+export const setupDB = async () => {
   const db = await RxDB.create({
     name: dbName,
     adapter: useAdapter,
     queryChangeDetection: true,
     password: dbPass,
+    pouchSettings: {
+      skip_setup: true,
+      auth: {
+        username: dbUsername,
+        password: dbPass,
+      },
+    },
   })
 
-  db.waitForLeadership().then(() => {
-    document.title = '♛ ' + document.title
-  })
+  db.waitForLeadership().then(() => (document.title = '♛ ' + document.title))
 
   await Promise.all(collections.map((collection) => db.collection(collection)))
-
-  await db.forms.sync({ remote, })
-
-  await db.contents.sync({ remote, })
 
   return db
 }

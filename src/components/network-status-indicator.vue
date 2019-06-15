@@ -1,15 +1,31 @@
 <template>
-  <v-alert :value="!isOnline" type="warning" :dismissible="true">
-    You are not connected to the internet !
+  <v-alert
+    :value="visible"
+    :type="isOnline ? 'success' : 'warning'"
+    :dismissible="true"
+  >
+    {{ message }}
   </v-alert>
 </template>
 
 <script>
 export default {
   name: 'NetworkStatusIndicator',
+  props: {
+    visible: {
+      type: Boolean,
+    },
+  },
   data: () => ({
     isOnline: true,
   }),
+  computed: {
+    message() {
+      return this.isOnline
+        ? 'You have access to the Internet'
+        : 'You are not connected to the Internet !'
+    },
+  },
   mounted() {
     this.updateStatus()
     window.addEventListener('online', this.updateStatus)
@@ -23,8 +39,10 @@ export default {
     updateStatus: function() {
       if (typeof window.navigator.onLine === 'undefined') {
         this.isOnline = true
+        this.$emit('changed:network', this.isOnline)
       } else {
         this.isOnline = window.navigator.onLine
+        this.$emit('changed:network', this.isOnline)
       }
     },
   },

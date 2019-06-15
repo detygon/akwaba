@@ -70,14 +70,7 @@ export default {
   },
   data() {
     return {
-      items: [
-        {
-          icon: 'account_circle',
-          href: '#',
-          title: 'Profile',
-          click: () => '',
-        },
-      ],
+      items: [],
     }
   },
   computed: {
