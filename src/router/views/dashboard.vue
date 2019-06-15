@@ -69,7 +69,7 @@ export default {
     const forms = await db.forms.find({ name: { $regex: /\w/ } }).exec()
     const responses = await db.responses.find({ data: { $regex: /\w/ } }).exec()
     this.countForms = forms.length
-    this.countResponses = responses.length
+    this.countResponses = forms.length ? responses.length : 0
   },
   beforeDestroy() {
     this.subs.forEach((sub) => {
