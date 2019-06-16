@@ -5,7 +5,7 @@ A digital data collection system to help organizations optimize the collection, 
 ## Live demo
 
 - Link: https://naughty-villani-151fac.netlify.com
-- Default credentials: admin/admin
+- Default credentials: admin/password
 
 ## Requirements
 
@@ -26,17 +26,17 @@ Rename the `env_example` file to .env:
 $ mv env_example .env
 ```
 
-*Note:* You should update the `.env` file to match your environment. Default values are provided.
+_Note:_ You should update the `.env` file to match your environment. Default values are provided.
 
 Then build the project:
 
 ```
-$ npm run build 
+$ npm run build
 ```
 
 ## Usage
 
-Akwaba is a PWA, so it needs to be run with a web server. You can serve the application by running:
+Akwaba is a PWA, you can serve the application by running:
 
 ```shell
 $ npm run start:prod
@@ -48,13 +48,12 @@ To start the Pouch Server, run:
 $ npm run server
 ```
 
-*Note:*: An internet connection is required for authentication.
-*Note:* You can run the Akwaba API server locally by following the instructions at its repository.
+_Note:_: An internet connection is required for authentication. _Note:_ You can run the Akwaba API server locally by following the instructions at its repository.
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
