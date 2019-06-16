@@ -40,7 +40,7 @@ $ npm run build
 
 ## Usage
 
-Akwaba is a PWA, you can serve the application by running:
+You can serve the application by running:
 
 ```shell
 $ npm run start:prod
