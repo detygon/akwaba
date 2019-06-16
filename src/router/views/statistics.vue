@@ -149,7 +149,11 @@ export default {
           return entry.name === inputName
         })
 
-        return { name: entry.value }
+        return {
+          name: Array.isArray(entry.value)
+            ? entry.value.join(',')
+            : entry.value,
+        }
       })
 
       this.dataset = map(groupBy(dataset, 'name'), (item) => {
