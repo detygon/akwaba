@@ -17,35 +17,39 @@
                 </div>
                 <v-form>
                   <v-text-field
+                    v-model="model.email"
                     append-icon="email"
                     label="Email"
                     type="text"
-                    v-model="model.email"
                   ></v-text-field>
                   <v-text-field
+                    v-model="model.username"
                     append-icon="person"
                     label="Username"
                     type="text"
-                    v-model="model.username"
                   ></v-text-field>
                   <v-text-field
+                    v-model="model.password"
                     append-icon="lock"
                     label="Password"
                     type="password"
-                    v-model="model.password"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-btn
+                  :loading="loading"
                   block
                   color="primary"
                   @click="register"
-                  :loading="loading"
                 >
                   Register
                 </v-btn>
               </v-card-actions>
+              <span>
+                Already have an account ? Login
+                <a href="/#/login"> here.</a>
+              </span>
             </v-card>
           </v-flex>
         </v-layout>
@@ -77,10 +81,11 @@ export default {
           localStorage.setItem('user', JSON.stringify(data.user))
           this.$router.push('/dashboard')
         })
-        .catch(() => {
+        .catch((error) => {
           this.loading = false
           localStorage.removeItem('jwt')
           localStorage.removeItem('user')
+          console.log(error)
           window.$app.$emit('NOTIFY_ERROR', 'Username or password invalid.')
         })
     },

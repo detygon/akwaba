@@ -1,35 +1,6 @@
-import { AuthLayout, DefaultLayout } from './layouts'
+import { DefaultLayout } from './layouts'
 
-export const publicRoute = [
-  {
-    path: '/auth',
-    component: AuthLayout,
-    meta: { title: 'Login' },
-    redirect: '/auth/login',
-    hidden: true,
-    children: [
-      {
-        path: 'login',
-        name: 'login',
-        meta: { title: 'Login' },
-        component: () => import('./views/auth/login.vue'),
-      },
-    ],
-  },
-  {
-    path: '/register',
-    name: 'register',
-    meta: { title: 'Create an account' },
-    component: () => import('./views/auth/registration.vue'),
-    hidden: true,
-  },
-  {
-    path: '*',
-    component: () => import('./views/error/not-found.vue'),
-  },
-]
-
-export const protectedRoute = [
+export default [
   {
     path: '/',
     component: DefaultLayout,
@@ -93,5 +64,23 @@ export const protectedRoute = [
         component: () => import('./views/statistics.vue'),
       },
     ],
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: { title: 'Login' },
+    component: () => import('./views/auth/login.vue'),
+    hidden: true,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    meta: { title: 'Create an account' },
+    component: () => import('./views/auth/registration.vue'),
+    hidden: true,
+  },
+  {
+    path: '*',
+    component: () => import('./views/error/not-found.vue'),
   },
 ]

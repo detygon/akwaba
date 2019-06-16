@@ -1,5 +1,5 @@
 <template>
-  <v-app id="login" class="primary">
+  <v-app class="primary">
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
@@ -17,26 +17,28 @@
                 </div>
                 <v-form>
                   <v-text-field
-                    append-icon="person"
-                    name="login"
-                    label="Login"
-                    type="text"
                     v-model="model.username"
+                    append-icon="person"
+                    label="Username"
+                    type="text"
                   ></v-text-field>
                   <v-text-field
+                    v-model="model.password"
                     append-icon="lock"
-                    name="password"
                     label="Password"
                     type="password"
-                    v-model="model.password"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn block color="primary" @click="login" :loading="loading">
+                <v-btn :loading="loading" block color="primary" @click="login">
                   Login
                 </v-btn>
               </v-card-actions>
+              <span>
+                Want to create an account ? It's
+                <a href="/#/register"> here.</a>
+              </span>
             </v-card>
           </v-flex>
         </v-layout>
@@ -77,15 +79,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="css">
-#login {
-  height: 50%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  content: "";
-  z-index: 0;
-}
-</style>
