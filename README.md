@@ -4,25 +4,29 @@ A digital data collection system to help organizations optimize the collection, 
 
 ## Live demo
 
+The project is a PWA, so it works best when served using `https`. Check out the hosted version at:
+
 - Link: https://naughty-villani-151fac.netlify.com
 - Default credentials: admin/password
 
 ## Requirements
 
-- Node JS 10.x.x and later
+- Node JS 10.x.x and later ([Installation instructions](https://nodejs.org/en/download/package-manager/))
 - A modern web browser e.g lastest version of Google Chrome
 
 ## Installation
 
-Run the following command inside the project directory to install the project dependencies:
+Open your operating system command-line interface, go to the project folder and run:
 
 ```shell
-$ npm install
+$ npm install # install the project dependencies
 ```
 
 Rename the `env_example` file to .env:
 
-```
+You can use your file explorer or if your are on a unix like system you can use:
+
+```shell
 $ mv env_example .env
 ```
 
@@ -30,7 +34,7 @@ _Note:_ You should update the `.env` file to match your environment. Default val
 
 Then build the project:
 
-```
+```shell
 $ npm run build
 ```
 
@@ -42,13 +46,14 @@ Akwaba is a PWA, you can serve the application by running:
 $ npm run start:prod
 ```
 
-To start the Pouch Server, run:
+To use the database server locally, update the value of `VUE_APP_SYNC_URL` in the .env file to `http://localhost:5984`, rebuild the application and run the following command:
 
 ```shell
 $ npm run server
 ```
 
-_Note:_: An internet connection is required for authentication. _Note:_ You can run the Akwaba API server locally by following the instructions at its repository.
+- _Note:_: An internet connection is required for authentication.
+- _Note:_ You can run the Akwaba API server locally by following the instructions at its repository.
 
 ## Contributing
 
