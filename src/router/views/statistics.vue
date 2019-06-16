@@ -144,14 +144,12 @@ export default {
       this.setData(formId)
     },
     makeDataset(inputName) {
-      console.log(inputName)
       const dataset = map(this.contents, (item) => {
         const entry = item.data.find((entry) => {
-          console.log(entry)
           return entry.name === inputName
         })
 
-        return { name: entry.label }
+        return { name: entry.value }
       })
 
       this.dataset = map(groupBy(dataset, 'name'), (item) => {
