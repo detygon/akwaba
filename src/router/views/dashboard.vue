@@ -52,6 +52,7 @@ import NetworkStatusIndicator from '@/components/network-status-indicator.vue'
 import MiniStatistic from '@/components/mini-statistic.vue'
 import dbService, { collections } from '@/service/db-service'
 import { dbRemote as remote } from '@/constants'
+import NProgress from 'nprogress'
 
 export default {
   components: {
@@ -84,6 +85,8 @@ export default {
         push: action === 'up',
       }
 
+      NProgress.start()
+
       const syncStates = Object.keys(db.collections).map((collection) => {
         return db[collection].sync({
           remote,
@@ -104,6 +107,7 @@ export default {
                 'Synchronization failed. Please try later.'
               )
             }
+            NProgress.done()
           })
         )
         this.subs.push(
@@ -111,6 +115,7 @@ export default {
             if (complete.ok) {
               window.$app.$emit('NOTIFY_SUCCESS', 'Synchronization completed')
             }
+            NProgress.done()
           })
         )
       })
@@ -127,7 +132,7 @@ export default {
         await Promise.all(
           collections.map((collection) => db.collection(collection))
         )
-        window.$app.$emit('NOTIFY', 'Data cleared')
+        window.$app.$emit('NOTIFY_SUCCESS', 'Local Data cleared')
       })
     },
   },
