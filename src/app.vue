@@ -1,5 +1,5 @@
 <template>
-  <div class="app-root">
+  <div class="app-root" data-app>
     <router-view :key="$route.name"></router-view>
     <!-- global snackbar -->
     <v-snackbar
@@ -18,17 +18,26 @@
         <v-icon>close</v-icon>
       </v-btn>
     </v-snackbar>
+    <!-- global loading dialog -->
+    <v-dialog v-model="dialog" hide-overlay persistent width="300">
+      <v-card color="primary" dark>
+        <v-card-text>
+          Please stand by
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
-import NetworkStatusIndicator from '@/components/network-status-indicator.vue'
 import AppEvents from '@/event'
 
 export default {
-  components: {
-    NetworkStatusIndicator,
-  },
   data() {
     return {
       rightDrawer: false,
@@ -41,6 +50,7 @@ export default {
         timeout: 6000,
         mode: '',
       },
+      dialog: false,
     }
   },
   created() {
