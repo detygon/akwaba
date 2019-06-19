@@ -144,17 +144,19 @@ export default {
       this.setData(formId)
     },
     makeDataset(inputName) {
-      const dataset = map(this.contents, (item) => {
+      const dataset = []
+
+      this.contents.forEach((item) => {
         const entry = item.data.find((entry) => entry.name === inputName)
 
-        console.log(entry)
-
-        return {
-          name: Array.isArray(entry.value)
-            ? entry.value.join(',')
-            : entry.value,
-          label: entry.label,
+        if (Array.isArray(entry.value)) {
+          entry.value.forEach((val, i) => {
+            dataset.push({ name: val, label: entry.label.split(',')[i] })
+          })
+          return
         }
+
+        dataset.push({ name: entry.value, label: entry.label })
       })
 
       this.dataset = map(groupBy(dataset, 'name'), (item) => {
