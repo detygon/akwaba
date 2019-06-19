@@ -6,10 +6,10 @@
           <NetworkStatusIndicator :visible="true" />
         </v-flex>
         <v-flex sm12 xs12>
-          <v-btn color="primary" @click="syncUp">
+          <v-btn color="primary" @click="sync('up')">
             Sync up
           </v-btn>
-          <v-btn color="green" dark @click="syncDown">
+          <v-btn color="green" dark @click="sync('down')">
             Sync down
           </v-btn>
           <v-btn color="red" dark @click="clearStorage">
@@ -20,7 +20,6 @@
       <v-layout row wrap>
         <v-flex md3 sm6 xs12>
           <MiniStatistic
-            :key="countForms"
             :title="countForms.toString()"
             sub-title="# Forms"
             color="blue"
@@ -29,7 +28,6 @@
         </v-flex>
         <v-flex md3 sm6 xs12>
           <MiniStatistic
-            :key="countResponses"
             :title="countResponses.toString()"
             sub-title="# Responses"
             color="orange"
@@ -38,7 +36,6 @@
         </v-flex>
         <v-flex md3 sm6 xs12>
           <MiniStatistic
-            :key="countAgents"
             :title="countAgents.toString()"
             sub-title="# Agents"
             color="indigo"
@@ -69,10 +66,16 @@ export default {
   }),
   async mounted() {
     const db = await dbService.get()
-    const forms = await db.forms.find({ name: { $regex: /\w/ } }).exec()
-    const responses = await db.responses.find({ data: { $regex: /\w/ } }).exec()
-    this.countForms = forms.length
-    this.countResponses = forms.length ? responses.length : 0
+    this.subs.push(
+      db.forms
+        .find({ name: { $regex: /\w/ } })
+        .$.subscribe((data) => (this.countForms = data.length))
+    )
+    this.subs.push(
+      db.responses
+        .find({ data: { $regex: /\w/ } })
+        .$.subscribe((data) => (this.countResponses = data.length))
+    )
   },
   beforeDestroy() {
     this.subs.forEach((sub) => {
@@ -80,12 +83,6 @@ export default {
     })
   },
   methods: {
-    syncUp() {
-      this.sync('up')
-    },
-    syncDown() {
-      this.sync('down')
-    },
     async sync(action) {
       const db = await dbService.get()
       const direction = {
@@ -140,9 +137,6 @@ export default {
           collections.map((collection) => db.collection(collection))
         )
         this.dialog = false
-        this.countForms = 0
-        this.countResponses = 0
-        this.countAgents = 0
         window.$app.$emit('LOADING', false)
       })
     },
