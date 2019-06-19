@@ -63,14 +63,11 @@ export default {
     description: '',
     data: null,
     error: false,
+    currentUser: null,
   }),
   created() {
     this.form = JSON.parse(sessionStorage.getItem('current-form')) || {}
-  },
-  mounted() {
-    if (this.form.formData) {
-      this.$route.meta.title = `Edit ${this.form.name}`
-    }
+    this.currentUser = JSON.parse(localStorage.getItem('user'))
   },
   beforeRouteLeave(to, from, next) {
     sessionStorage.removeItem('current-form')
@@ -91,6 +88,7 @@ export default {
           formData: this.data,
           name: this.name,
           description: this.description,
+          createdBy: this.currentUser.id.toString(),
         },
       })
     },
@@ -109,6 +107,7 @@ export default {
         id: Date.now().toString(),
         name: this.name,
         description: this.description,
+        createdBy: this.currentUser.id.toString(),
       }
 
       db.forms.insert(item).then(() => {

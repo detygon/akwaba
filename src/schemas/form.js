@@ -17,6 +17,9 @@ export default {
     formData: {
       type: 'object',
     },
+    createdBy: {
+      type: 'string',
+    },
   },
   required: ['id', 'name', 'formData'],
 }
