@@ -37,82 +37,86 @@ export default {
     this.sub.unsubscribe()
   },
   methods: {
+    getFormElement(selector, all) {
+      return all
+        ? Array.from(this.$refs.form.querySelectorAll(selector))
+        : this.$refs.form.querySelector(selector)
+    },
+    getLabel(input) {
+      if (input.type.includes('select')) {
+        return input
+          .querySelector(`option[value="${input.value}"]`)
+          .getAttribute('label')
+      }
+
+      if (input.type === 'radio') {
+        const el = this.getFormElement(`[name="${input.name}"]:checked`)
+        return this.getFormElement(`label[for="${el.id}"]`).textContent
+      }
+
+      if (input.type === 'checkbox') {
+        const selector = `[name="${input.name}"]:checked`
+        const boxes = this.getFormElement(selector, true)
+        const labels = boxes.map((box) => {
+          return this.getFormElement(`label[for="${box.id}"]`)
+        })
+        return labels.map((x) => x.textContent).join(',')
+      }
+
+      return this.getFormElement(`label[for="${input.id}"]`).textContent
+    },
     async handleSubmit(data) {
       const db = await dbService.get()
+      const _done = []
       const entry = {
         id: Date.now().toString(),
         formId: this.form.id,
         data: [],
       }
 
-      let inputs = Array.from(data.target).filter((input) => {
+      const inputs = Array.from(data.target).filter((input) => {
         return (
           (['radio', 'checkbox'].includes(input.type) && input.checked) ||
           input.type !== 'submit'
         )
       })
 
-      const _done = []
-
       inputs.forEach((input) => {
         const inputName = input.name.replace(/\[\]/g, '')
-        let inputLabel = ''
+        let inputValue = input.value
 
         if (_done.includes(inputName)) {
           return
         }
 
-        const el = entry.data.find((x) => x.name === inputName)
-
-        if (el) {
-          let inputValue = null
-
+        // Process radios and input only once
+        // we retrieve all checked innput only once
+        // this avoid duplicating data for the same field
+        if (['radio', 'checkbox'].includes(input.type)) {
           if (input.type === 'radio') {
-            const radioEl = this.$refs.form.querySelector(
-              `[name="${input.name}"]:checked`
-            )
-            inputValue = radioEl.value
-            inputLabel = this.$refs.form.querySelector(
-              `label[for="${radioEl.id}"]`
-            )
+            const el = this.getFormElement(`[name="${input.name}"]:checked`)
+            inputValue = el.value
           }
 
           if (input.type === 'checkbox') {
-            const boxes = this.$refs.form.querySelectorAll(
-              `[name="${input.name}"]:checked`
-            )
-            inputValue = Array.from(boxes).map((x) => x.value)
-            inputLabel = this.$refs.form.querySelector(
-              `label[for="${boxes[0].id}"]`
-            )
+            const selector = `[name="${input.name}"]:checked`
+            const boxes = this.getFormElement(selector, true)
+            inputValue = boxes.map((x) => x.value)
           }
 
-          entry.data[entry.data.indexOf(el)].value = inputValue
-          entry.data[entry.data.indexOf(el)].label = inputLabel.textContent
           _done.push(inputName)
-          return
-        }
-
-        inputLabel = this.$refs.form.querySelector(`label[for="${input.id}"]`)
-
-        function getSelectLabel(input) {
-          return input
-            .querySelector(`option[value="${input.value}"]`)
-            .getAttribute('label')
         }
 
         entry.data.push({
           name: inputName,
           type: input.type,
-          value: input.value,
-          label: input.type.includes('select')
-            ? getSelectLabel(input)
-            : inputLabel.textContent,
+          value: inputValue,
+          label: this.getLabel(input),
         })
       })
 
       db.responses.insert(entry).then(() => {
-        window.$app.$emit('APP_RESOURCE_SAVED', entry)
+        window.$app.$emit('APP_RESOURCE_SAVED')
         this.$refs.form.reset()
       })
     },
