@@ -95,11 +95,19 @@ export default {
 
         inputLabel = this.$refs.form.querySelector(`label[for="${input.id}"]`)
 
+        function getSelectLabel(input) {
+          return input
+            .querySelector(`option[value="${input.value}"]`)
+            .getAttribute('label')
+        }
+
         entry.data.push({
           name: inputName,
           type: input.type,
           value: input.value,
-          label: inputLabel.textContent,
+          label: input.type.includes('select')
+            ? getSelectLabel(input)
+            : inputLabel.textContent,
         })
       })
 

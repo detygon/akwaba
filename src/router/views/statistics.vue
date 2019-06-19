@@ -7,13 +7,13 @@
             <v-select
               :items="items"
               solo
-              label="Form name"
+              label="Form"
               @change="getFormContents"
             ></v-select>
             <v-select
               :items="data"
               solo
-              label="Data item"
+              label="Filter field"
               @change="makeDataset"
             ></v-select>
             <v-select
@@ -145,19 +145,20 @@ export default {
     },
     makeDataset(inputName) {
       const dataset = map(this.contents, (item) => {
-        const entry = item.data.find((entry) => {
-          return entry.name === inputName
-        })
+        const entry = item.data.find((entry) => entry.name === inputName)
+
+        console.log(entry)
 
         return {
           name: Array.isArray(entry.value)
             ? entry.value.join(',')
             : entry.value,
+          label: entry.label,
         }
       })
 
       this.dataset = map(groupBy(dataset, 'name'), (item) => {
-        return { name: item[0].name, value: item.length }
+        return { name: item[0].label, value: item.length }
       })
 
       this.chartKey = Date.now()

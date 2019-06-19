@@ -45,7 +45,6 @@ export default [
     name: 'LOADING',
     callback: function(isLoading) {
       this.dialog = isLoading
-      console.log(this.dialog)
     },
   },
 ]
