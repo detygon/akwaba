@@ -31,7 +31,6 @@ export const setupDB = async () => {
     queryChangeDetection: true,
     password: dbPass,
     pouchSettings: {
-      skip_setup: true,
       auth: {
         username: dbUsername,
         password: dbPass,
