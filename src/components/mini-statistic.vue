@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import BaseIcon from '@/components/_base-icon.vue'
-
 export default {
   props: {
     icon: {
@@ -33,9 +31,6 @@ export default {
     title: String,
     subTitle: String,
     color: String,
-  },
-  components: {
-    BaseIcon,
   },
 }
 </script>

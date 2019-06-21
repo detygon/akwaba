@@ -1,32 +1,15 @@
-/**
- * ECharts Vue Wrapper
- * Michael Wang
- */
 import colors from 'vuetify/es5/util/colors'
 import _object from 'lodash/object'
+import ECharts from 'echarts'
 
-const ECharts = window.echarts || undefined
-if (ECharts === undefined) {
-  console.error('ECharts is not defined')
-}
-// set color palette
 const colorPalette = []
+
 Object.entries(colors).forEach((item) => {
   if (item[1].base) {
     colorPalette.push(item[1].base)
   }
 })
-// default
-// const colorPalette = ['#d87c7c', '#919e8b', '#d7ab82', '#6e7074', '#61a0a8', '#efa18d', '#787464', '#cc7e63', '#724e58', '#4b565b'];
-// ECharts.registerTheme('material', {
-//   color: colorPalette,
-//   graph: {
-//     color: colorPalette
-//   }
-//   textStyle: {
 
-//   }
-// });
 ;(function() {
   const throttle = function(type, name, obj) {
     obj = obj || window
@@ -46,6 +29,7 @@ Object.entries(colors).forEach((item) => {
   /* init - you can init any event */
   throttle('resize', 'optimizedResize')
 })()
+
 export default {
   name: 'v-echart',
 

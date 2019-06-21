@@ -4,7 +4,6 @@ import ResponseSchema from '@/schemas/response'
 
 RxDB.plugin(require('pouchdb-adapter-idb'))
 RxDB.plugin(require('pouchdb-adapter-http'))
-RxDB.plugin(require('pouchdb-authentication'))
 
 const useAdapter = 'idb'
 const dbName = process.env.VUE_APP_DB_NAME || 'akwaba'
